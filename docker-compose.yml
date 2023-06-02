@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+ 
+   postgres:
+    image: postgres
+    container_name: postgres_db
+    environment:
+        POSTGRES_USERNAME: postgres
+        POSTGRES_PASSWORD: postgres
+      
+    ports:
+      - "5432:5432" 
+   
+   user_management:
+    image: 19952013/user_management
+    ports:
+      - "8087:8087"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    
+   authentication:
+    image: 19952013/authentication
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    
+    
+   
+   
