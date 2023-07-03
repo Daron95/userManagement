@@ -8,9 +8,7 @@ public class Endpoints {
     String serviceName;
     String methodName;
     String url;
-    String address = "localhost";
-    // String address = "172.22.32.1";
-    // String address = "172.20.32.20";
+    String address = "20.74.97.35";
     String port = "8090";
 
     public Endpoints() {

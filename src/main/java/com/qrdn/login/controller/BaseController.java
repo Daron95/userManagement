@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
-public class BaseController  {
+public class BaseController {
 
     /**
-     * The fields that will be added to each request : request_time_stamp, request_id, client_ip
+     * The fields that will be added to each request : request_time_stamp,
+     * request_id, client_ip
      * 
      * @param request
      */

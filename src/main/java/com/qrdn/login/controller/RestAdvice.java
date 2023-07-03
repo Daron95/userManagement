@@ -1,7 +1,6 @@
 package com.qrdn.login.controller;
 
 import java.util.UUID;
-
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -42,7 +41,8 @@ public class RestAdvice implements ResponseBodyAdvice<Object> {
             ServerHttpRequest request, ServerHttpResponse response) {
 
         ResponseWrapper<Object> modifiedResponse = new ResponseWrapper<>();
-        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
 
         modifiedResponse.setResponse(body);
         modifiedResponse.setRequestTimeStamp(servletRequest.getAttribute("request_time_stamp").toString());

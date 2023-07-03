@@ -1,6 +1,5 @@
 package com.qrdn.login.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-// import com.qrdn.common.controller.BaseController;
-// import com.qrdn.common.log.entity.LogDetails.Priority;
 import com.qrdn.login.entity.User;
 import com.qrdn.login.entity.UserPassword;
 import com.qrdn.login.service.UserService;

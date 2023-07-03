@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.5</version>
+		<version>3.0.6</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.qrdn</groupId>
@@ -17,6 +17,18 @@
 	<properties>
 		<java.version>19</java.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>spring-cloud-azure-dependencies</artifactId>
+				<version>4.7.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -87,11 +99,6 @@
 			<version>2.14.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.9</version>
@@ -105,14 +112,24 @@
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
 		</dependency> -->
-<!-- 
-		<dependency>
+
+		<!-- <dependency>
 			<groupId>com.qrdn.messaging</groupId>
 			<artifactId>qrdn</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\DaronKirakossian\vs code projects\almasar\project\project\target\library/DB_Connect.jar</systemPath>
+			<systemPath>C:\Users\DaronKirakossian\vs code
+		projects\almasar\project\project\target\library/db_connect.jar</systemPath>
 		</dependency> -->
+
+		<!-- <dependency>
+			<groupId>com.qrdn.pdf</groupId>
+			<artifactId>mnppdf</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>C:\Users\DaronKirakossian\vs code projects\almasar\project\user managment\target\library\mnppdf-0.0.1.jar</systemPath>
+		</dependency> -->
+
 	</dependencies>
 
 	<build>

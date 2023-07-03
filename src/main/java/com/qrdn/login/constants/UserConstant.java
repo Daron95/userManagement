@@ -73,6 +73,8 @@ public class UserConstant {
     public static final String EMPTY_FIRST_NAME_INPUT_MESSAGE = "First name input is not filled";
     public static final String EMPTY_LAST_NAME_INPUT = "EMPTY LAST NAME INPUT";
     public static final String EMPTY_LAST_NAME_INPUT_MESSAGE = "Last name input is not filled";
+    public static final String EMPTY_STATUS_INPUT = "EMPTY STATUS INPUT";
+    public static final String EMPTY_STATUS_INPUT_MESSAGE = "Status input is not filled";
 
     // Invalid inputs
     public static final String INCORRECT_USER_NAME_FORMAT = "INCORRECT USER NAME FORMAT";
@@ -87,5 +89,7 @@ public class UserConstant {
     public static final String INCORRECT_MOBILE_FORMAT_MESSAGE = "Mobile should not contain letters";
     public static final String INVALID_PASSWORD_FREQUENCY_INPUT = "INVALID PASSWORD FREQUENCY INPUT";
     public static final String INVALID_PASSWORD_FREQUENCY_MESSAGE = "Password Frequency should be : Monthly or Quarterly or Semiannually or Annually. If it is empty then it will be Unlimited";
+    public static final String INVALID_STATUS_INPUT = "INVALID STATUS INPUT";
+    public static final String INVALID_STATUS_INPUT_MESSAGE = "Status should be : Active or Suspended";
 
 }

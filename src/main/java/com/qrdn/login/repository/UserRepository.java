@@ -9,6 +9,7 @@ import com.qrdn.login.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
+
     Optional<User> findById(String userId);
 
 }

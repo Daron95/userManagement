@@ -27,7 +27,7 @@ import com.qrdn.login.repository.UserRepository;
 import com.qrdn.login.service.passwordhash.HashingPasswordAargon2;
 
 @Service
-public class UserService  {
+public class UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -96,9 +96,10 @@ public class UserService  {
             // rollback , if one database operations failed
             userRepository.save(user);
         } catch (Exception e) {
-
-           // handleServiceException(Priority.High, user, "error occured while creating the user ", e,
-                    //new HashMap<>());
+            System.out.println(e);
+            // handleServiceException(Priority.High, user, "error occured while creating the
+            // user ", e,
+            // new HashMap<>());
         }
         return user;
     }
@@ -151,13 +152,14 @@ public class UserService  {
                     currentUser.setErrorDescription(UserConstant.PASSWORD_EXPIRED_MESSAGE);
 
                 }
-                if (currentUser.getStatus().equals(UserConstant.NEW)) {
+                if (currentUser.getStatus().equalsIgnoreCase(UserConstant.NEW)) {
 
                     currentUser.setErrorCode(UserConstant.STATUS_NEW);
                     currentUser.setErrorDescription(UserConstant.STATUS_NEW_MESSAGE);
 
                 }
-                if (currentUser.getErrorCode().isEmpty() && currentUser.getStatus().equals(UserConstant.ACTIVE)) {
+                if (currentUser.getErrorCode().isEmpty()
+                        && currentUser.getStatus().equalsIgnoreCase(UserConstant.ACTIVE)) {
 
                     currentUser.setErrorCode(UserConstant.SUCCESS);
                     currentUser.setErrorDescription(UserConstant.SUCCESS_MESSAGE);
@@ -173,8 +175,10 @@ public class UserService  {
                 user.setErrorDescription(UserConstant.USER_NOT_FOUND_MESSAGES);
             }
         } catch (Exception e) {
-            // handleServiceException(Priority.High, user, "error occured while sign in ", e,
-            //         new HashMap<>());
+            System.out.println(e);
+            // handleServiceException(Priority.High, user, "error occured while sign in ",
+            // e,
+            // new HashMap<>());
         }
         return user;
     }
@@ -213,8 +217,9 @@ public class UserService  {
                 user.setErrorDescription(UserConstant.USER_NOT_FOUND_MESSAGES);
             }
         } catch (Exception e) {
-            // handleServiceException(Priority.High, user, "error occured while deleting the user ", e,
-            //         new HashMap<>());
+            // handleServiceException(Priority.High, user, "error occured while deleting the
+            // user ", e,
+            // new HashMap<>());
         }
         return user;
     }
@@ -229,10 +234,13 @@ public class UserService  {
     public User updateUser(User user) {
 
         try {
-            user = checkUserNameNullOrInvalid(user);
+
+            user = checkNullAndFormat(user);
+            user = checkStatus(user);
             if (!user.getErrorCode().isEmpty()) {
                 return user;
             }
+
             Credentials credentials;
             Optional<User> checkUser = userRepository.findById(user.getUserName());
             Optional<Credentials> checkCredentials = credentialsRepository.findById(user.getUserName());
@@ -241,7 +249,7 @@ public class UserService  {
 
                 credentials = checkCredentials.get();
 
-                if (checkUser.get().getStatus().equals(UserConstant.DELETED)) {
+                if (checkUser.get().getStatus().equalsIgnoreCase(UserConstant.DELETED)) {
                     user.setErrorCode(UserConstant.STATUS_DELETED);
                     user.setErrorDescription(UserConstant.UPDATE_STATUS_DELETED_MESSAGE);
                     return user;
@@ -251,11 +259,27 @@ public class UserService  {
                     user.setPassword(credentials.getPassword());
                     user.setType(credentials.getType());
                     user.setUpdatedDate(new java.sql.Date(System.currentTimeMillis()));
+
                     if (user.getPasswordFrequency().equalsIgnoreCase(UserConstant.DEFAULT)) {
                         user.setPasswordValidilityDate("Unlimited");
                     } else {
                         user.setPasswordValidilityDate(calculateUserValidilityDate(user.getPasswordFrequency()));
                     }
+
+                    if (user.getUpdatedBy() == null || user.getUpdatedBy().isEmpty()) {
+                        user.setUpdatedBy("api");
+                    }
+
+                    user.setFirstNameEn(checkUser.get().getFirstNameEn());
+                    user.setLastNameEn(checkUser.get().getLastNameEn());
+                    user.setCreatedBy(checkUser.get().getCreatedBy());
+                    user.setCreatedDate(checkUser.get().getCreatedDate());
+
+                    user.setGroupCode(checkUser.get().getGroupCode());
+                    user.setOfficeCode(checkUser.get().getOfficeCode());
+                    user.setOrganizationCode(checkUser.get().getOrganizationCode());
+                    user.setRole(checkUser.get().getRole());
+
                     user.setErrorCode(UserConstant.SUCCESS);
                     user.setErrorDescription(UserConstant.SUCCESS_MESSAGE);
                     userRepository.save(user);
@@ -267,8 +291,10 @@ public class UserService  {
             }
 
         } catch (Exception e) {
-            // handleServiceException(Priority.High, user, "error occured while updating the user ", e,
-            //         new HashMap<>());
+            System.out.println(e);
+            // handleServiceException(Priority.High, user, "error occured while updating the
+            // user ", e,
+            // new HashMap<>());
         }
         return user;
     }
@@ -316,20 +342,20 @@ public class UserService  {
                     user.setErrorDescription(UserConstant.UNMATCHED_PASSWORD_MESSAGE);
 
                 }
-                if (!user.getStatus().equals(UserConstant.NEW) &&
+                if (!user.getStatus().equalsIgnoreCase(UserConstant.NEW) &&
                         userPassword.getOldPassword().equals(
                                 userPassword.getNewPassword())) {
                     user.setErrorCode(UserConstant.SAME_PASSWORD);
                     user.setErrorDescription(UserConstant.SAME_PASSWORD_MESSAGE);
 
                 }
-                if (user.getStatus().equals(UserConstant.SUSPEND)) {
+                if (user.getStatus().equalsIgnoreCase(UserConstant.SUSPEND)) {
                     user.setErrorCode(UserConstant.STATUS_SUSPEND);
                     user.setErrorDescription(UserConstant.STATUS_SUSPEND_MESSAGE);
 
                 }
 
-                if (!user.getStatus().equals(UserConstant.NEW) &&
+                if (!user.getStatus().equalsIgnoreCase(UserConstant.NEW) &&
                         !HashingPasswordAargon2.verifyPassword(userPassword.getOldPassword(),
                                 credentials.getPassword())) {
                     user.setErrorCode(UserConstant.PASSWORD_WRONG);
@@ -376,8 +402,9 @@ public class UserService  {
 
         } catch (Exception e) {
 
-            // handleServiceException(Priority.High, user, "error occured while changing the user's password ", e,
-            //         new HashMap<>());
+            // handleServiceException(Priority.High, user, "error occured while changing the
+            // user's password ", e,
+            // new HashMap<>());
         }
         return user;
     }
@@ -538,7 +565,7 @@ public class UserService  {
      */
     public User checkNullAndLenght(UserPassword userPassword, User user) {
 
-        if (!user.getStatus().equals(UserConstant.NEW)
+        if (!user.getStatus().equalsIgnoreCase(UserConstant.NEW)
                 && (userPassword.getOldPassword() == null || userPassword.getOldPassword().isEmpty())) {
             user.setErrorCode(UserConstant.EMPTY_OLD_PASSWORD_INPUT);
             user.setErrorDescription(UserConstant.EMPTY_OLD_PASSWORD_INPUT_MESSAGE);
@@ -574,6 +601,20 @@ public class UserService  {
         return user;
     }
 
+    public User checkStatus(User user) {
+
+        if (user.getStatus() == null || user.getStatus().isEmpty()) {
+            user.setErrorCode(UserConstant.EMPTY_STATUS_INPUT);
+            user.setErrorDescription(UserConstant.EMPTY_STATUS_INPUT_MESSAGE);
+
+        } else if (!user.getStatus().equalsIgnoreCase(UserConstant.ACTIVE)
+                && !user.getStatus().equalsIgnoreCase(UserConstant.SUSPEND)) {
+            user.setErrorCode(UserConstant.INVALID_STATUS_INPUT);
+            user.setErrorDescription(UserConstant.INVALID_STATUS_INPUT_MESSAGE);
+        }
+        return user;
+    }
+
     /**
      * check if the user status is deleted
      * 
@@ -581,10 +622,10 @@ public class UserService  {
      * @return User
      */
     public User checkDeletedAndSuspended(User user) {
-        if (user.getStatus().equals(UserConstant.DELETED)) {
+        if (user.getStatus().equalsIgnoreCase(UserConstant.DELETED)) {
             user.setErrorCode(UserConstant.STATUS_DELETED);
             user.setErrorDescription(UserConstant.STATUS_DELETED_MESSAGE);
-        } else if (user.getStatus().equals(UserConstant.SUSPEND)) {
+        } else if (user.getStatus().equalsIgnoreCase(UserConstant.SUSPEND)) {
             user.setErrorCode(UserConstant.STATUS_SUSPEND);
             user.setErrorDescription(UserConstant.STATUS_SUSPEND_MESSAGE);
         }
